@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 )
@@ -32,13 +32,15 @@ func main() {
 
 	fmt.Println("And now my watch begins...")
 	for event := range watcher.ResultChan() {
-		obj, ok := event.Object.(*unstructured.Unstructured)
+		fmt.Printf("event type: %s \n", event.Type)
+
+		pod, ok := event.Object.(*corev1.Pod)
 
 		if !ok {
 			continue
 		}
 
-		fmt.Println(obj)
+		fmt.Printf("pod name: %s\n", pod.Name)
 	}
 
 	fmt.Println(listedPods)
