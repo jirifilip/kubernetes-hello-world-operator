@@ -30,13 +30,18 @@ func main() {
 
 	ctx := context.Background()
 
-	result, err := dynamicClient.Resource(schema.GroupVersionResource{Group: "", Version: "v1", Resource: "pods"}).Namespace("").List(ctx, metav1.ListOptions{})
+	resource := schema.GroupVersionResource{
+		Group:    "jirifilip.github.com",
+		Version:  "v1beta1",
+		Resource: "nginxconfigs",
+	}
+	result, err := dynamicClient.Resource(resource).Namespace("").List(ctx, metav1.ListOptions{})
 	controller.Must(err)
 
 	for _, podObject := range result.Items {
 		spec := podObject.Object["spec"].(map[string]interface{})
 
-		fmt.Println(spec["containers"])
+		fmt.Println(spec["pageContent"])
 	}
 
 	controller.WatchPods(typedClient, ctx)

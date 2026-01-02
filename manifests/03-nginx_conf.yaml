@@ -1,0 +1,10 @@
+apiVersion: jirifilip.github.com/v1beta1
+kind: NginxConfig
+
+metadata:
+  name: test-nginx-config
+  namespace: custom-controller-test
+
+spec:
+  pageContent: |
+    <h1>Hello!</h1>
