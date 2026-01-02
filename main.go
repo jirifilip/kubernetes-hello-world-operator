@@ -5,8 +5,12 @@ import (
 	"fmt"
 
 	"github.com/jirifilip/kubernetes-operator-hello-world/pkg/controller"
+	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
 func main() {
@@ -21,7 +25,19 @@ func main() {
 	typedClient, err := kubernetes.NewForConfig(config)
 	controller.Must(err)
 
+	dynamicClient, err := dynamic.NewForConfig(config)
+	controller.Must(err)
+
 	ctx := context.Background()
+
+	result, err := dynamicClient.Resource(schema.GroupVersionResource{Group: "", Version: "v1", Resource: "pods"}).Namespace("").List(ctx, metav1.ListOptions{})
+	controller.Must(err)
+
+	for _, podObject := range result.Items {
+		spec := podObject.Object["spec"].(map[string]interface{})
+
+		fmt.Println(spec["containers"])
+	}
 
 	controller.WatchPods(typedClient, ctx)
 
