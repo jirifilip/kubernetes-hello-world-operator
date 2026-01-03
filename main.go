@@ -7,7 +7,6 @@ import (
 	"github.com/jirifilip/kubernetes-operator-hello-world/pkg/controller"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"
-	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -21,9 +20,6 @@ func main() {
 	}
 
 	fmt.Println("Hello world!")
-
-	typedClient, err := kubernetes.NewForConfig(config)
-	controller.Must(err)
 
 	dynamicClient, err := dynamic.NewForConfig(config)
 	controller.Must(err)
@@ -44,6 +40,5 @@ func main() {
 		fmt.Println(spec["pageContent"])
 	}
 
-	controller.WatchPods(typedClient, ctx)
-
+	controller.WatchNginxConfigs(*dynamicClient, ctx)
 }
