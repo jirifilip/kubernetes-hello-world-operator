@@ -40,5 +40,5 @@ func main() {
 		fmt.Println(spec["pageContent"])
 	}
 
-	controller.WatchNginxConfigs(*dynamicClient, ctx)
+	controller.WatchNginxConfigs(dynamicClient, ctx)
 }
