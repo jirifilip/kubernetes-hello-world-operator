@@ -26,3 +26,5 @@ spec:
               properties:
                 pageContent:
                   type: string
+            status:
+              type: bool
