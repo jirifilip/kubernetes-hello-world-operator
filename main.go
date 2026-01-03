@@ -10,6 +10,8 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
+	"github.com/jirifilip/kubernetes-operator-hello-world/pkg/generated/internalclientset"
 )
 
 func main() {
@@ -23,6 +25,9 @@ func main() {
 
 	dynamicClient, err := dynamic.NewForConfig(config)
 	controller.Must(err)
+
+	cs, err := internalclientset.NewForConfig(config)
+	fmt.Println(cs)
 
 	ctx := context.Background()
 
